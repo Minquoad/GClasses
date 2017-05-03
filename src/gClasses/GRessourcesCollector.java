@@ -13,6 +13,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 
 public abstract class GRessourcesCollector {
+	
 	public static BufferedInputStream getBufferedInputStream(String name) {
 		return new BufferedInputStream(GRessourcesCollector.class.getClassLoader().getResourceAsStream(name));
 	}
