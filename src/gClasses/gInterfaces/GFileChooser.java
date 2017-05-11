@@ -5,8 +5,8 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
-public abstract class GChoixFichier {
-
+public class GFileChooser {
+	
 	public enum Mode {
 		SAVING, OPENING
 	}
