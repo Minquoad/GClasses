@@ -17,7 +17,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import gClasses.DataAssociator;
-import gClasses.GRessourcesCollector;
+import gClasses.GResourcesCollector;
 
 public class GFrame extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 981627542880662376L;
@@ -38,7 +38,7 @@ public class GFrame extends JFrame implements ActionListener {
 
 	public GFrame(String titre, int largeur, int hauteur, String icone, File framePreferencesFile) {
 		if (icone != null) {
-			this.setIconImage(GRessourcesCollector.getImage(icone));
+			this.setIconImage(GResourcesCollector.getImage(icone));
 		}
 
 		this.construct(titre, largeur, hauteur, framePreferencesFile);
