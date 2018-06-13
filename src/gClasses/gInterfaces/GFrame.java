@@ -22,64 +22,60 @@ import gClasses.GResourcesCollector;
 public class GFrame extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 981627542880662376L;
 
+	private static final String X_LOCATION_ON_SCREEN_KEY = "gFrameXLocationOnScreenKey";
+	private static final String Y_LOCATION_ON_SCREEN_KEY = "gFrameYLocationOnScreenKey";
+	private static final String WIDTH_KEY = "gFrameWidthKey";
+	private static final String HEIGHT_KEY = "gFrameHeightKey";
+	private static final String EXTENDED_STATE_KEY = "gFrameExtendedStateKey";
+	
 	private GCardLayout cardLayout;
 
-	public GFrame(String titre, int largeur, int hauteur) {
-		this.construct(titre, largeur, hauteur, null);
-	}
-
-	public GFrame(String titre, int largeur, int hauteur, Image icone, File framePreferencesFile) {
-		if (icone != null) {
-			this.setIconImage(icone);
-		}
-
-		this.construct(titre, largeur, hauteur, framePreferencesFile);
-	}
-
-	public GFrame(String titre, int largeur, int hauteur, String icone, File framePreferencesFile) {
-		if (icone != null) {
-			this.setIconImage(GResourcesCollector.getImage(icone));
-		}
-
-		this.construct(titre, largeur, hauteur, framePreferencesFile);
-	}
-
-	private void construct(String titre, int largeur, int hauteur, File framePreferencesFile) {
-		if (titre != null) {
-			this.setTitle(titre);
-		}
+	private GFrame() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setMinimumSize(new Dimension(largeur, hauteur));
 		this.setLocationRelativeTo(null);
 		this.cardLayout = new GCardLayout();
 		this.getContentPane().setLayout(cardLayout);
+	}
+	
+	public GFrame(int largeur, int hauteur) {
+		this();
+		this.setMinimumSize(new Dimension(largeur, hauteur));
+	}
 
+	public GFrame(String titre, int largeur, int hauteur) {
+		this(largeur, hauteur);
+		if (titre != null) {
+			this.setTitle(titre);
+		}
+	}
+
+	public GFrame(String titre, int largeur, int hauteur, File framePreferencesFile) {
+		this(titre, largeur, hauteur);
 		this.framePreferencesFile = framePreferencesFile;
 		if (framePreferencesFile != null) {
 			try {
 				DataAssociator da = new DataAssociator(framePreferencesFile);
-				if (da.exists("frame_x_LocationOnScreen") == false) {
-					da.addValue("frame_x_LocationOnScreen", 50);
+				if (da.exists(X_LOCATION_ON_SCREEN_KEY) == false) {
+					da.addValue(X_LOCATION_ON_SCREEN_KEY, 50);
 				}
-				if (da.exists("frame_y_LocationOnScreen") == false) {
-					da.addValue("frame_y_LocationOnScreen", 50);
+				if (da.exists(Y_LOCATION_ON_SCREEN_KEY) == false) {
+					da.addValue(Y_LOCATION_ON_SCREEN_KEY, 50);
 				}
-				if (da.exists("frame_Width") == false) {
-					da.addValue("frame_Width", largeur);
+				if (da.exists(WIDTH_KEY) == false) {
+					da.addValue(WIDTH_KEY, this.getMinimumSize().width);
 				}
-				if (da.exists("frame_Height") == false) {
-					da.addValue("frame_Height", hauteur);
+				if (da.exists(HEIGHT_KEY) == false) {
+					da.addValue(HEIGHT_KEY, this.getMinimumSize().height);
 				}
-				if (da.exists("frame_ExtendedState") == false) {
-					da.addValue("frame_ExtendedState", 0);
+				if (da.exists(EXTENDED_STATE_KEY) == false) {
+					da.addValue(EXTENDED_STATE_KEY, 0);
 				}
-
 				da.save();
 
-				this.setLocation(da.getValueInt("frame_x_LocationOnScreen"),
-						da.getValueInt("frame_y_LocationOnScreen"));
-				this.setSize(new Dimension(da.getValueInt("frame_Width"), da.getValueInt("frame_Height")));
-				this.setExtendedState(da.getValueInt("frame_ExtendedState"));
+				this.setLocation(da.getValueInt(X_LOCATION_ON_SCREEN_KEY),
+						da.getValueInt(Y_LOCATION_ON_SCREEN_KEY));
+				this.setSize(new Dimension(da.getValueInt(WIDTH_KEY), da.getValueInt(HEIGHT_KEY)));
+				this.setExtendedState(da.getValueInt(EXTENDED_STATE_KEY));
 
 			} catch (Exception e1) {
 				e1.printStackTrace();
@@ -111,6 +107,17 @@ public class GFrame extends JFrame implements ActionListener {
 		}
 	}
 
+	public GFrame(String titre, int largeur, int hauteur, File framePreferencesFile, Image icone) {
+		this(titre, largeur, hauteur, framePreferencesFile);
+		if (icone != null) {
+			this.setIconImage(icone);
+		}
+	}
+
+	public GFrame(String titre, int largeur, int hauteur, File framePreferencesFile, String icone) {
+		this(titre, largeur, hauteur, framePreferencesFile, GResourcesCollector.getImage(icone));
+	}
+
 	public void dispose() {
 		this.saveState();
 		super.dispose();
@@ -123,13 +130,13 @@ public class GFrame extends JFrame implements ActionListener {
 			try {
 				DataAssociator da = new DataAssociator(framePreferencesFile);
 
-				da.setValue("frame_ExtendedState", getExtendedState());
+				da.setValue(EXTENDED_STATE_KEY, getExtendedState());
 
 				if (getExtendedState() != 6) {
-					da.setValue("frame_x_LocationOnScreen", getLocationOnScreen().x);
-					da.setValue("frame_y_LocationOnScreen", getLocationOnScreen().y);
-					da.setValue("frame_Width", getWidth());
-					da.setValue("frame_Height", getHeight());
+					da.setValue(X_LOCATION_ON_SCREEN_KEY, getLocationOnScreen().x);
+					da.setValue(Y_LOCATION_ON_SCREEN_KEY, getLocationOnScreen().y);
+					da.setValue(WIDTH_KEY, getWidth());
+					da.setValue(HEIGHT_KEY, getHeight());
 				}
 
 				da.save(framePreferencesFile);

@@ -13,16 +13,15 @@ public class GFakeLoadingBar extends GLoadingBar {
 	}
 
 	public void restart() {
-		if (incrementor != null) {
-			incrementor.end();
-		}
-		incrementor = new Incrementor();
+		end();
+		start();
 	}
 
 	public void end() {
 		if (incrementor != null) {
 			incrementor.end();
 		}
+		incrementor = null;
 	}
 
 	private class Incrementor extends Thread {
